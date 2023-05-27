@@ -1,0 +1,42 @@
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+from url_filter.backends.django import DjangoFilterBackend
+
+from .models import Ouvrages, OuvragesDiffusion, AvisOuvrages
+from .permissions import IsAdminAuthenticated
+from .serializers import OuvrageSerialiser, OuvragesDiffusionSerializers, AvisSurOuvragesSerializers
+from rest_framework.decorators import action
+
+
+class MultipleSerializerMixin:
+    # Un mixin est une classe qui ne fonctionne pas de façon autonome
+    # Elle permet d'ajouter des fonctionnalités aux classes qui les étendent
+
+    detail_serializer_class = None
+
+    def get_serializer_class(self):
+        # Notre mixin détermine quel serializer à utiliser
+        # même si elle ne sait pas ce que c'est ni comment l'utiliser
+        if self.action == 'retrieve' and self.detail_serializer_class is not None:
+            # Si l'action demandée est le détail alors nous retournons le serializer de détail
+            return self.detail_serializer_class
+        return super().get_serializer_class()
+
+
+class OuvagesAdminViewset(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = OuvrageSerialiser
+    queryset = Ouvrages.objects.all()
+    permission_classes = [IsAdminAuthenticated]
+
+
+class AvisSurOuvragesAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = AvisSurOuvragesSerializers
+    queryset = AvisOuvrages.objects.all()
+    permission_classes = [IsAdminAuthenticated]
+
+
+class OuvagesDiffusionAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = OuvragesDiffusionSerializers
+    queryset = OuvragesDiffusion.objects.all()
+    permission_classes = [IsAdminAuthenticated]
+

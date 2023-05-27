@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+pkill python3
+
+rm ./aleatek/db.sqlite3
+python3 ./aleatek/manage.py makemigrations
+python3 ./aleatek/manage.py migrate
+python3 ./aleatek/manage.py createsuperuser
+python3 ./aleatek/manage.py seed services
+python3 ./aleatek/manage.py seed destinations
+python3 ./aleatek/manage.py seed missions
+python3 ./aleatek/manage.py seed marques
+python3 ./aleatek/manage.py seed collaborateurs
+python3 ./aleatek/manage.py seed Media
+python3 ./aleatek/manage.py seed Document
+python3 ./aleatek/manage.py seed Rapports
+python3 ./aleatek/manage.py seed clients
+python3 ./aleatek/manage.py seed Dashbord
+python3 ./aleatek/manage.py seed constructeurs
+python3 ./aleatek/manage.py seed Ouvrages
+python3 ./aleatek/manage.py runserver
