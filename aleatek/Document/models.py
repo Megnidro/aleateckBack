@@ -93,6 +93,7 @@ class Documents(models.Model):
     num_revision = models.CharField(max_length=20, verbose_name='N° révision', default=1)
     fichier_attache = models.ManyToManyField(FichierAttache, blank=True)
     affectation = models.ManyToManyField(IntervenantInterventionDocument)
+    validateur = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, blank=True, related_name="Documents")
 
     def __str__(self):
         return self.titre
