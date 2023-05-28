@@ -24,7 +24,7 @@ from Dashbord.views import ProductAdminViewsetAdmin, FicheAffairesAdminViewsetAd
     PlanAffairesAdminViewsetAdmin, FilterQuerysetAdminView, TableauDeBordQuerysetAdminView, FilterQuerysetAffaireDocumentAdminView
 
 from destinations.views import DestinationBatimentAdminViewsetAdmin
-from Document.views import AvisAdminViewset, DocumentsAdminViewsetAdmin, FichierAdminViewsetAdmin, AffectaionInterventionAdminViewsetAdmin
+from Document.views import AvisAdminViewset, DocumentsAdminViewsetAdmin, FichierAdminViewsetAdmin, AffectaionInterventionAdminViewsetAdmin, CommentaireAvisAdminViewsetAdmin
 from Aso.views import AsoAdminViewsetAdmin
 from Ouvrages.views import OuvagesDiffusionAdminViewsetAdmin, AvisSurOuvragesAdminViewsetAdmin, OuvagesAdminViewset
 from Rapports.views import StatutSaisiRapportAdminViewsetAdmin, AIEAdminViewsetAdmin, RapportDeConceptionViewsetAdmin,\
@@ -33,9 +33,9 @@ from Rapports.views import StatutSaisiRapportAdminViewsetAdmin, AIEAdminViewsetA
 
 # Ici nous créons notre routeur
 router = routers.SimpleRouter()
-
+#router.register('admin/users/connected/<int:id>',UtilisateursConnectes, basename='admin-connexion')
 router.register('admin/document/filter',FilterQuerysetAffaireDocumentAdminView, basename='admin-documentfilter')
-
+router.register('admin/commentaire/avis' ,CommentaireAvisAdminViewsetAdmin, basename='admin-commentaire-avis')
 router.register('admin/intervenant',AffectaionInterventionAdminViewsetAdmin, basename='admin-intervanant')
 router.register('admin/rapport/visite', RapportDeVisiteViewsetAdmin, basename='admin-rapport')
 
@@ -76,23 +76,15 @@ router.register('admin/entreprise/media/registration', MediaEntrepriseAdminViews
                 basename='admin-entreprise-media-registration')
 
 urlpatterns = [
-    path('connecte-users/', UtilisateursConnectes.as_view({'get': 'list'}), name='connected-users'),
+    path('api/connecte/users/<int:pk>/', UtilisateursConnectes.as_view({'get': 'list'}), name='connected-users'),
     path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),
     path('api/medias/<int:charg_affaire_id>/medias/', MediaSerializerAdmin.as_view({'get': 'list'}), name='media-list'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/', include(router.urls)),
-    # path('api-auth/', include('rest_framework.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('api/users/dj-rest-auth/', include('dj_rest_auth.urls')),  # new
     path('api/users/dj-rest-auth/registration/',  # new
         include('dj_rest_auth.registration.urls')),
 ]
-
-
-"""
-    path('api/filtres/<str:produit>/<str:ville>/str:province>/<str:departement>/<str:compte_postal>/'
-         '<str:numero_affaire>/<int:numero_service_en_charge/<str:numero_contrat_provisoire>/<str:charge_de_affaire/'
-         '>/<str:statut_affaire>/<str:client>/<str:libelle_affaire>', FilterQuerysetAdminView, name='filtres')
-"""
-

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
-from .models import Avis, Documents, FichierAttache, IntervenantInterventionDocument
+from .models import Avis, Documents, FichierAttache, IntervenantInterventionDocument, Commentaire
 
 
 class AvisSerialiser(ModelSerializer):
@@ -25,3 +25,10 @@ class IntervenantDocumentSerializer(ModelSerializer):
     class Meta:
         model = IntervenantInterventionDocument
         fields = '__all__'
+
+
+class CommentaireSerializer(ModelSerializer):
+    class Meta:
+        model = Commentaire
+        fields = '__all__'
+

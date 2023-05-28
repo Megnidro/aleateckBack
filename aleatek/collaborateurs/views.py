@@ -1,13 +1,17 @@
+import email
 from datetime import timezone
-
+from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from url_filter.backends.django import DjangoFilterBackend
-
+from django.shortcuts import get_object_or_404
 from .models import Collaborateurs
 from .permissions import IsAdminAuthenticated
 from .serializers import ColaboratteursSerializer
 from rest_framework.decorators import action
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .decorators import *
 
 
 class MultipleSerializerMixin:
@@ -30,24 +34,26 @@ class CollaborateursAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     queryset = Collaborateurs.objects.all()
     permission_classes = [IsAdminAuthenticated]
 
-
-
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from datetime import *
+from django.utils import timezone
+from datetime import datetime
 from django.contrib.sessions.models import Session
-
-
-class UtilisateursConnectes(MultipleSerializerMixin, ModelViewSet):
+class UtilisateursConnectes(MultipleSerializerMixin, ModelViewSet, LoginRequiredSuperuserMixim):
     serializer_class = ColaboratteursSerializer
-    permission_classes = [IsAdminAuthenticated]
 
-    def get(self, request):
+    def retrieve(self, request, pk=None):
+        active_sessions = Session.objects.filter(expire_date__gte=datetime.now())
+        user_id_list = [session.get_decoded().get('_auth_user_id') for session in active_sessions]
+        connected_user = Collaborateurs.objects.filter(id__in=user_id_list, id=pk).first()
+
+        if connected_user:
+            serializer = self.serializer_class(connected_user)
+            return Response(serializer.data)
+        else:
+            return Response({'message': 'Utilisateur non trouvé.'}, status=404)
+
+    def get_queryset(self):
         active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
         user_id_list = [session.get_decoded().get('_auth_user_id') for session in active_sessions]
         connected_users = Collaborateurs.objects.filter(id__in=user_id_list)
-        username_list = [Collaborateurs.username for user in connected_users]
-        return Response(username_list)
-
-    def get_queryset(self):
-        return Collaborateurs.objects.filter(is_active=True)
+        return connected_users.filter(id=self.kwargs['pk'])

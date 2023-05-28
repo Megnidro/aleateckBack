@@ -1,4 +1,3 @@
-import random
 
 from django.db import models
 
@@ -34,7 +33,14 @@ class IntervenantInterventionDocument(models.Model):
     affecte_par = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, related_name='IntervenantInterventionDocuments')
 
     def __str__(self):
-        return self.action
+        return str(self.action)
+
+class Commentaire(models.Model):
+    a_suivre = models.BooleanField(default=False)
+    commentaire = models.TextField(max_length=500)
+    def __str__(self):
+        return self.commentaire
+
 
 
 
@@ -49,15 +55,9 @@ class Avis(models.Model):
         ('VI', 'VI')
     ]
     avis = models.CharField(choices=AVIS, max_length=20)
-    commentaire = models.TextField(max_length=500)
-    a_suivre = models.BooleanField(default=False)
     collaborateurs = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, default='')
+    commentaire = models.ManyToManyField(Commentaire)
     valide = models.BooleanField(default=False)
-
-    def save(self, *args, **kwargs):
-        if self.avis == 'RMQ':
-            self.a_suivre = True
-        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.avis
@@ -70,9 +70,18 @@ class Avis(models.Model):
         super().save(*args, **kwargs)
 """
 class Documents(models.Model):
+    AVIS = [
+        ('F', 'F'),
+        ('RMQ', 'RMQ'),
+        ('FA', 'FA'),
+        ('HM', 'HM'),
+        ('SO', 'SO'),
+        ('VI', 'VI')
+    ]
     emetteur = models.ForeignKey(Entreprise, on_delete=models.CASCADE, related_name='Documentss')
     dossier = models.CharField(max_length=200, default='Execution', choices=(('Execution', 'Execution'), ('Concdption', 'Conception')))
     ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, related_name='Documents')
+    codification = models.CharField(max_length=3, choices=AVIS)
     exam = models.ManyToManyField(Avis)
     nature = models.CharField(max_length=20, default='Plan')
     numero_externe = models.IntegerField(verbose_name='N° Externe')

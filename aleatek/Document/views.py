@@ -2,7 +2,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from url_filter.backends.django import DjangoFilterBackend
 
-from .models import Avis, Documents, FichierAttache, IntervenantInterventionDocument
+from .models import Avis, Documents, FichierAttache, IntervenantInterventionDocument, Commentaire
 from .permissions import IsAdminAuthenticated
 from .serializers import AvisSerialiser, DocumentSerializers, FichierSerializers, IntervenantDocumentSerializer
 from rest_framework.decorators import action
@@ -40,12 +40,14 @@ class FichierAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     queryset = FichierAttache.objects.all()
     permission_classes = [IsAdminAuthenticated]
 
-
-
-
-
 class AffectaionInterventionAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     serializer_class = IntervenantDocumentSerializer
     queryset = IntervenantInterventionDocument.objects.all()
     permission_classes = [IsAdminAuthenticated]
 
+
+from .serializers import CommentaireSerializer
+class CommentaireAvisAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
+    serializer_class = CommentaireSerializer
+    queryset = Commentaire.objects.all()
+    permission_classes = [IsAdminAuthenticated]

@@ -61,8 +61,7 @@ class Collaborateurs(AbstractUser):
     city = models.CharField(max_length=15)
     state = models.CharField(max_length=15)
     country = models.CharField(max_length=15)
-    groups = models.ManyToManyField(Group, related_name='collaborateurs_set')
-    user_permissions = models.ManyToManyField(Permission, related_name='collaborateurs_set')
+    active = models.BooleanField(default=True)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username','first_name', 'last_name', 'poste_occupe', 'phone_number']
