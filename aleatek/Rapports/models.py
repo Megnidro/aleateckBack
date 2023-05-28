@@ -8,6 +8,8 @@ from destinations.models import Destination
 
 from Dashbord.models import Affaires
 
+from Ouvrages.models import Ouvrages
+
 
 class StatutSaisiRapport(models.Model):
     STATUTS = [
@@ -61,6 +63,8 @@ class RapportConception(models.Model):
 
 class RapportDeVisite(models.Model):
     affaire = models.ForeignKey(Affaires, on_delete=models.CASCADE)
+    ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, default="")
+    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, default="")
     objet = models.CharField(max_length=50)
     description = RichTextField(blank=True, null=True, verbose_name='contenu')
 
