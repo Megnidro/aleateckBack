@@ -16,7 +16,7 @@ from missions.views import MissionsAdminViewsetAdmin
 
 from services.views import CbAdminViewsetAdmin
 
-from collaborateurs.views import CollaborateursAdminViewsetAdmin, UtilisateursConnectes
+from collaborateurs.views import CollaborateursAdminViewsetAdmin, UtilisateursConnectes, UtilisateurConnecteView
 
 from destinations.views import DestinationBatimentAdminViewsetAdmin
 
@@ -76,6 +76,7 @@ router.register('admin/entreprise/media/registration', MediaEntrepriseAdminViews
                 basename='admin-entreprise-media-registration')
 
 urlpatterns = [
+    path('utilisateur-connecte/', UtilisateurConnecteView.as_view(), name='utilisateur_connecte'),
     path('api/connecte/users/<int:pk>/', UtilisateursConnectes.as_view({'get': 'list'}), name='connected-users'),
     path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),

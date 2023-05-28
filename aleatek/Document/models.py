@@ -27,7 +27,7 @@ class FichierAttache(models.Model):
 
 class IntervenantInterventionDocument(models.Model):
     intervenant = models.ManyToManyField(Collaborateurs)
-    intervention_technique = models.ManyToManyField(InterventionTechniqueAssocie)
+    intervention_technique = models.ManyToManyField(InterventionTechniqueAssocie, blank=True)
     affecte_le =  models.DateField()
     action = models.BooleanField(default=False)
     affecte_par = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, related_name='IntervenantInterventionDocuments')
@@ -81,8 +81,8 @@ class Documents(models.Model):
     emetteur = models.ForeignKey(Entreprise, on_delete=models.CASCADE, related_name='Documentss')
     dossier = models.CharField(max_length=200, default='Execution', choices=(('Execution', 'Execution'), ('Concdption', 'Conception')))
     ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, related_name='Documents')
-    codification = models.CharField(max_length=3, choices=AVIS)
-    exam = models.ManyToManyField(Avis)
+    codification = models.CharField(max_length=3, choices=AVIS, blank=True)
+    exam = models.ManyToManyField(Avis, blank=True)
     nature = models.CharField(max_length=20, default='Plan')
     numero_externe = models.IntegerField(verbose_name='N° Externe')
     numero_aleatek = models.ForeignKey(Affaires, on_delete=models.CASCADE)

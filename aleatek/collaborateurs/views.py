@@ -12,7 +12,7 @@ from rest_framework.decorators import action
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .decorators import *
-
+from rest_framework.views import APIView
 
 class MultipleSerializerMixin:
     # Un mixin est une classe qui ne fonctionne pas de façon autonome
@@ -57,3 +57,15 @@ class UtilisateursConnectes(MultipleSerializerMixin, ModelViewSet, LoginRequired
         user_id_list = [session.get_decoded().get('_auth_user_id') for session in active_sessions]
         connected_users = Collaborateurs.objects.filter(id__in=user_id_list)
         return connected_users.filter(id=self.kwargs['pk'])
+
+
+
+class UtilisateurConnecteView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        user = request.user
+        data = {
+            'id' : user.id
+        }
+        return Response(data)
