@@ -16,3 +16,4 @@ admin.site.register(Activite)
 admin.site.register(Entreprise, EntrepriseAdminModel)
 
 admin.site.register(MediaCommunications, MadiaAdminModel)
+

@@ -38,6 +38,7 @@ class IntervenantInterventionDocument(models.Model):
 class Commentaire(models.Model):
     a_suivre = models.BooleanField(default=False)
     commentaire = models.TextField(max_length=500)
+    image = models.ImageField(blank=True)
     def __str__(self):
         return self.commentaire
 
@@ -78,12 +79,33 @@ class Documents(models.Model):
         ('SO', 'SO'),
         ('VI', 'VI')
     ]
+    Nature = [
+        ('TOUS', 'TOUS'),
+        ('Descriptif', 'Descriptif'),
+        ('AT/DTA', 'AT/DTA'),
+        ('Attestation Incendie', 'Attestation Incendie'),
+        ('Carnet', 'Carnet'),
+        ('Certificat', 'Certificat'),
+        ('Certificat incendie', 'Certificat incendie'),
+        ('Compte rendue', 'Compte rendu'),
+        ('Courrier', 'Courrier'),
+        ('fiche techinique', 'Fiche Technique'),
+        ('Note', 'Note'),
+        ('Note de calcule', 'Note de calcule'),
+        ('Notice', 'Notice'),
+        ('Plan', 'Plan'),
+        ('PV', 'PV'),
+        ('PV incendie', 'PV Incendie'),
+        ('Rapport', 'Rapport'),
+        ('Schéma', 'Schéma')
+    ]
     emetteur = models.ForeignKey(Entreprise, on_delete=models.CASCADE, related_name='Documentss')
+    nos_reference = models.CharField(max_length=500, default='')
     dossier = models.CharField(max_length=200, default='Execution', choices=(('Execution', 'Execution'), ('Concdption', 'Conception')))
     ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, related_name='Documents')
     codification = models.CharField(max_length=3, choices=AVIS, blank=True)
     exam = models.ManyToManyField(Avis, blank=True)
-    nature = models.CharField(max_length=20, default='Plan')
+    nature = models.CharField(max_length=20, default='Plan', choices = Nature)
     numero_externe = models.IntegerField(verbose_name='N° Externe')
     numero_aleatek = models.ForeignKey(Affaires, on_delete=models.CASCADE)
     date_de_indice = models.DateField()
@@ -96,4 +118,4 @@ class Documents(models.Model):
     validateur = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, blank=True, related_name="Documents")
 
     def __str__(self):
-        return self.titre
+        return f"{self.nature} {self.num_revision} {self.indice} {self.titre} {self.date_de_indice}"

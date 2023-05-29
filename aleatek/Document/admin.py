@@ -1,6 +1,12 @@
 from django.contrib import admin
-from .models import FichierAttache, Documents
-# Register your models here.
+from .models import FichierAttache, Documents, IntervenantInterventionDocument
 admin.site.register(FichierAttache)
-admin.site.register(Documents)
 
+
+class DocumentAdminVieuw(admin.ModelAdmin):
+    list_display = [
+        'emetteur', 'dossier', 'ouvrage', 'codification', 'nature', 'numero_aleatek', 'date_de_indice',
+        'indice', 'titre'
+    ]
+admin.site.register(Documents,DocumentAdminVieuw)
+admin.site.register(IntervenantInterventionDocument)

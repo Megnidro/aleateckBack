@@ -15,13 +15,16 @@ class Ouvrages(models.Model):
 class AvisOuvrages(models.Model):
     ouvrages = models.ForeignKey(Ouvrages, on_delete=models.CASCADE)
     commentaire = models.CharField(max_length=500)
+    image = models.ImageField(upload_to='imageOuvrage', default='')
 
     def __str__(self):
         return self.avis
 
 
 class OuvragesDiffusion(models.Model):
-    designation = models.ForeignKey(Ouvrages, on_delete=models.CASCADE)
+    ouvrages_diffusion = models.IntegerField(blank=True, default=1)
+    a_risque = models.BooleanField(default=True)
     diffusion_systematique = models.BooleanField(default=False)
-    activite = models.CharField(max_length=500)
-    libelle = models.CharField(max_length=500, verbose_name='Libelle du lot/chantier')
+    activite = models.CharField(max_length=50)
+    ouvrage_type = models.ForeignKey(Ouvrages, on_delete=models.CASCADE)
+    code_ged = models.CharField(max_length=5, blank=True)
