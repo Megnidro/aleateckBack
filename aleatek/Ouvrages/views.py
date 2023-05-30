@@ -58,14 +58,20 @@ class OuvrageidAffaireid(APIView):
 
 
 
-class OuvrageidAffaireid(APIView):
+class DocumentOuvrageidFilter(APIView):
     permission_classes = [IsAuthenticated]
     def get(self, request, id_ouvrage, id_affaire):
-        data_document = Documents.objects.select_related('exam').filter(ouvrage=id_ouvrage)
+        data_document = Documents.objects.filter(numero_aleatek=id_affaire, ouvrage=id_ouvrage)
 
         data = {
-            'result': list(data_document)
+            'result': list(data_document.values())
         }
+
+        myvalue = list(data_document.values())
+        for key, values in myvalue:
+            return key, values
+
         return Response(data)
+
 
 

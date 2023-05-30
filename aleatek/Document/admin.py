@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import FichierAttache, Documents, IntervenantInterventionDocument, Avis
+from .models import FichierAttache, Documents, IntervenantInterventionDocument, Avis, Commentaire
 admin.site.register(FichierAttache)
 
 
@@ -10,5 +10,8 @@ class DocumentAdminVieuw(admin.ModelAdmin):
     ]
 admin.site.register(Documents,DocumentAdminVieuw)
 admin.site.register(IntervenantInterventionDocument)
+admin.site.register(Commentaire)
 admin.site.register(Avis)
+
+
 
