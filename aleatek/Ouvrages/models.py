@@ -7,6 +7,13 @@ from constructeurs.models import Entreprise
 
 class Ouvrages(models.Model):
     libelle = models.CharField(max_length=20)
+    diffusion_systematique = models.BooleanField(default=False)
+    activite = models.CharField(max_length=20)
+    libelle_lot = models.CharField(max_length=30)
+    type_douvrage = models.CharField(max_length=20)
+    types = models.CharField(max_length=20)
+    constructeurs = models.ManyToManyField(Entreprise)
+    tableau_diffusion = models.ManyToManyField(Entreprise)
 
     def __str__(self):
         return self.libelle
