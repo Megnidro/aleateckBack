@@ -7,7 +7,7 @@ from constructeurs.models import Entreprise
 
 class Ouvrages(models.Model):
     libelle = models.CharField(max_length=20)
-    contructeurs = models.ForeignKey(Entreprise, on_delete=models.CASCADE, blank=True)
+    contructeurs = models.ForeignKey(Entreprise, on_delete=models.CASCADE, blank=True, default='')
 
     def __str__(self):
         return self.libelle

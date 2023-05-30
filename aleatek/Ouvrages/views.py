@@ -1,11 +1,15 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from url_filter.backends.django import DjangoFilterBackend
-
+from django.http import JsonResponse
+from rest_framework.response import Response
 from .models import Ouvrages, OuvragesDiffusion, AvisOuvrages
 from .permissions import IsAdminAuthenticated
 from .serializers import OuvrageSerialiser, OuvragesDiffusionSerializers, AvisSurOuvragesSerializers
 from rest_framework.decorators import action
+from rest_framework.views import APIView
+
+from  Document.models import Documents
 
 
 class MultipleSerializerMixin:
@@ -29,6 +33,7 @@ class OuvagesAdminViewset(MultipleSerializerMixin, ModelViewSet):
     permission_classes = [IsAdminAuthenticated]
 
 
+
 class AvisSurOuvragesAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     serializer_class = AvisSurOuvragesSerializers
     queryset = AvisOuvrages.objects.all()
@@ -39,4 +44,28 @@ class OuvagesDiffusionAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     serializer_class = OuvragesDiffusionSerializers
     queryset = OuvragesDiffusion.objects.all()
     permission_classes = [IsAdminAuthenticated]
+
+class OuvrageidAffaireid(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id_ouvrage, id_affaire):
+
+        data = {
+            'id_ouvrage' : id_ouvrage,
+            'id_affaire': id_affaire
+        }
+        return Response(data)
+
+
+
+class OuvrageidAffaireid(APIView):
+    permission_classes = [IsAuthenticated]
+    def get(self, request, id_ouvrage, id_affaire):
+        data_document = Documents.objects.select_related('exam').filter(ouvrage=id_ouvrage)
+
+        data = {
+            'result': list(data_document)
+        }
+        return Response(data)
+
 

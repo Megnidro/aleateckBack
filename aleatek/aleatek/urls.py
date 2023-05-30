@@ -17,7 +17,6 @@ from missions.views import MissionsAdminViewsetAdmin
 from services.views import CbAdminViewsetAdmin
 
 from collaborateurs.views import CollaborateursAdminViewsetAdmin, UtilisateursConnectes, UtilisateurConnecteView
-
 from destinations.views import DestinationBatimentAdminViewsetAdmin
 
 from Dashbord.views import ProductAdminViewsetAdmin, FicheAffairesAdminViewsetAdmin, \
@@ -30,10 +29,10 @@ from Ouvrages.views import OuvagesDiffusionAdminViewsetAdmin, AvisSurOuvragesAdm
 from Rapports.views import StatutSaisiRapportAdminViewsetAdmin, AIEAdminViewsetAdmin, RapportDeConceptionViewsetAdmin,\
     RapportDeVisiteViewsetAdmin
 
+from Ouvrages.views import OuvrageidAffaireid
 
 # Ici nous créons notre routeur
 router = routers.SimpleRouter()
-#router.register('admin/users/connected/<int:id>',UtilisateursConnectes, basename='admin-connexion')
 router.register('admin/document/filter',FilterQuerysetAffaireDocumentAdminView, basename='admin-documentfilter')
 router.register('admin/commentaire/avis' ,CommentaireAvisAdminViewsetAdmin, basename='admin-commentaire-avis')
 router.register('admin/intervenant',AffectaionInterventionAdminViewsetAdmin, basename='admin-intervanant')
@@ -80,6 +79,7 @@ urlpatterns = [
     path('api/connecte/users/<int:pk>/', UtilisateursConnectes.as_view({'get': 'list'}), name='connected-users'),
     path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),
+    path('getremarque/<int:id_ouvrage>/<int:id_affaire>/', OuvrageidAffaireid.as_view()),
     path('api/medias/<int:charg_affaire_id>/medias/', MediaSerializerAdmin.as_view({'get': 'list'}), name='media-list'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
@@ -89,3 +89,4 @@ urlpatterns = [
     path('api/users/dj-rest-auth/registration/',  # new
         include('dj_rest_auth.registration.urls')),
 ]
+#une route
