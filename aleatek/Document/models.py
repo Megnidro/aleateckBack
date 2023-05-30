@@ -57,7 +57,7 @@ class Avis(models.Model):
     ]
     avis = models.CharField(choices=AVIS, max_length=20)
     collaborateurs = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, default='')
-    commentaire = models.ManyToManyField(Commentaire)
+    commentaire = models.ManyToManyField(Commentaire, blank=True)
     valide = models.BooleanField(default=False)
 
     def __str__(self):
@@ -100,7 +100,6 @@ class Documents(models.Model):
         ('Schéma', 'Schéma')
     ]
     emetteur = models.ForeignKey(Entreprise, on_delete=models.CASCADE, related_name='Documentss')
-    nos_reference = models.CharField(max_length=500, default='')
     dossier = models.CharField(max_length=200, default='Execution', choices=(('Execution', 'Execution'), ('Concdption', 'Conception')))
     ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, related_name='Documents')
     codification = models.CharField(max_length=3, choices=AVIS, blank=True)
@@ -115,7 +114,7 @@ class Documents(models.Model):
     num_revision = models.CharField(max_length=20, verbose_name='N° révision', default=1)
     fichier_attache = models.ManyToManyField(FichierAttache, blank=True)
     affectation = models.ManyToManyField(IntervenantInterventionDocument)
-    validateur = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, blank=True, related_name="Documents")
+    validateur = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, null=True, related_name="Documents")
 
     def __str__(self):
         return f"{self.nature} {self.num_revision} {self.indice} {self.titre} {self.date_de_indice}"

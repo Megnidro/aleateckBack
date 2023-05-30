@@ -5,6 +5,7 @@ from django.db import models
 from Ouvrages.models import Ouvrages
 
 from Ouvrages.models import AvisOuvrages
+from Dashbord.models import Affaires
 
 from constructeurs.models import Entreprise
 
@@ -23,9 +24,8 @@ class ASO(models.Model):
     date = models.DateField(null=True)
     ouvrage = models.ForeignKey(Ouvrages, on_delete=models.CASCADE, null=True)
     statut = models.CharField(choices=ETAPES, max_length=50, default=0)
-    liste_de_diffusion = models.ManyToManyField(Entreprise)
     redacteur = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, default='')
-
+    affaire = models.ForeignKey(Affaires, on_delete=models.CASCADE)
     class Meta:
         verbose_name = "ASO"
         # verbose_name_plural = "ASOS"

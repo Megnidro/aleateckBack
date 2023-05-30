@@ -9,7 +9,7 @@ from .serializers import OuvrageSerialiser, OuvragesDiffusionSerializers, AvisSu
 from rest_framework.decorators import action
 from rest_framework.views import APIView
 
-from  Document.models import Documents
+from  Document.models import Documents, Avis
 
 
 class MultipleSerializerMixin:
@@ -60,18 +60,23 @@ class OuvrageidAffaireid(APIView):
 
 class DocumentOuvrageidFilter(APIView):
     permission_classes = [IsAuthenticated]
+
     def get(self, request, id_ouvrage, id_affaire):
-        data_document = Documents.objects.filter(numero_aleatek=id_affaire, ouvrage=id_ouvrage)
+        codification = ['RMQ', 'FA', 'F', 'HM', 'SO', 'VI']
+        data_documents = Documents.objects.filter(numero_aleatek=id_affaire, ouvrage=id_ouvrage)
 
-        data = {
-            'result': list(data_document.values())
-        }
+        avis_data_table = []
 
-        myvalue = list(data_document.values())
-        for key, values in myvalue:
-            return key, values
+        for document in data_documents:
+            exam = document.exam.all()
+            avis_data_table.extend(Avis.objects.filter(id__in=exam).values())
 
-        return Response(data)
+        result = avis_data_table[0]
+        for avis in avis_data_table:
+            if codification.index(avis['avis']) < codification.index(result['avis']):
+                result = avis
+
+        return Response({'result': result})
 
 
 
