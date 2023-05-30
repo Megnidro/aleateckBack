@@ -36,7 +36,7 @@ class Affaires(models.Model):
     numero_affaire = models.CharField(max_length=5)
     libelle_affaire = models.CharField(max_length=500)
     statut_affaire = models.CharField(max_length=20, choices=AFFAIRES)
-    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name="Client-RS-ZIG-Ville")
+    client = models.ForeignKey(Entreprise, on_delete=models.CASCADE, verbose_name="Client-RS-ZIG-Ville")
     numero_service_en_charge = models.ForeignKey(SERVICES, on_delete=models.CASCADE)
     charge_de_affaire = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, related_name='Affairesss')
     assistant = models.ForeignKey(Collaborateurs, on_delete=models.CASCADE, related_name='Affairesssss')

@@ -19,3 +19,4 @@ class AvisSurOuvragesSerializers(ModelSerializer):
     class Meta:
         model = AvisOuvrages
         fields = '__all__'
+

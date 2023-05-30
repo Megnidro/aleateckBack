@@ -9,7 +9,7 @@ class MadiaAdminModel(admin.ModelAdmin):
 
 
 class EntrepriseAdminModel(admin.ModelAdmin):
-    list_display = ['raison_social', 'mel', 'cedex', 'courrier']
+    list_display = ['raison_social']
 
 
 admin.site.register(Activite)
