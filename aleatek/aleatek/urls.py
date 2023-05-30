@@ -31,6 +31,8 @@ from Rapports.views import StatutSaisiRapportAdminViewsetAdmin, AIEAdminViewsetA
 
 from Ouvrages.views import OuvrageidAffaireid, DocumentOuvrageidFilter
 
+from Aso.views import AsoAffaireidFilter
+
 # Ici nous créons notre routeur
 router = routers.SimpleRouter()
 router.register('admin/document/filter',FilterQuerysetAffaireDocumentAdminView, basename='admin-documentfilter')
@@ -80,6 +82,7 @@ urlpatterns = [
     path('api/get-csrf-token/', get_csrf_token, name='get_csrf_token'),
     path('admin/', admin.site.urls),
     path('getremarque/<int:id_ouvrage>/<int:id_affaire>/', DocumentOuvrageidFilter.as_view()),
+    path('getasoaffaire/<int:id_affaire>/', AsoAffaireidFilter.as_view()),
     path('api/medias/<int:charg_affaire_id>/medias/', MediaSerializerAdmin.as_view({'get': 'list'}), name='media-list'),
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),

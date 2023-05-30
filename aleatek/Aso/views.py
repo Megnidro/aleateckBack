@@ -1,6 +1,7 @@
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from url_filter.backends.django import DjangoFilterBackend
+from rest_framework.response import Response
 
 from .models import ASO
 from .permissions import IsAdminAuthenticated
@@ -27,4 +28,18 @@ class AsoAdminViewsetAdmin(MultipleSerializerMixin, ModelViewSet):
     serializer_class = DestinationSerializer
     queryset = ASO.objects.all()
     permission_classes = [IsAdminAuthenticated]
+
+from rest_framework.views import APIView
+
+class AsoAffaireidFilter(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, id_affaire):
+        data_aso = ASO.objects.filter(affaire=id_affaire)
+
+        data = {
+            'result': list(data_aso.values())
+        }
+
+        return Response(data)
 
